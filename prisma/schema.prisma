@@ -14,3 +14,28 @@ datasource db {
   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
+
+model User {
+  id            String    @id       // unikatni ID
+  username      String    @unique 
+  displayName   String              //displayName nemusi byt unikatni
+  email         String?   @unique   //email musi byt unikatni ale neni potreba protoze budeme mit moznost prihlaseni pomoci GOOGLU
+  passwordHash  String?             // nemusi byt unikatni neni potreba protoze bude k dispozici GOOGLE login
+  googleId      String?   @unique   // pokud user pouziva google login musi byt unikatni
+  avatarUrl     String?             // nepovine tady budeme ukladatat user avatar
+  bio           String?
+  sessions      Session[]
+
+  createdAt     DateTime   @default(now()) // tohle je pridano aby jsme to nemuseli vytvaret pozdeji Prisma nam to vygeneruje automaticky
+
+  @@map("users")    // "users je odkaz na model User" + slouzi jako spravne prejmenovani
+}
+
+model Session {
+     id         String      @id
+     userId     String
+     expiresAt  DateTime
+     User       User        @relation(fields: [userId], references:[id], onDelete: Cascade) //userId odkazuje(referances): na id v model User nahore +++++ onDelete: Cascade kdyz smazeme Usera model Session bude take smazana
+
+    @@map("sessions") //spravne prejmenovani
+}
