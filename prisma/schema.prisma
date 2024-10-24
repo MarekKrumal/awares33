@@ -35,7 +35,7 @@ model Session {
      id         String      @id
      userId     String
      expiresAt  DateTime
-     User       User        @relation(fields: [userId], references:[id], onDelete: Cascade) //userId odkazuje(referances): na id v model User nahore +++++ onDelete: Cascade kdyz smazeme Usera model Session bude take smazana
+     user       User        @relation(fields: [userId], references:[id], onDelete: Cascade) //userId odkazuje(referances): na id v model User nahore +++++ onDelete: Cascade kdyz smazeme Usera model Session bude take smazana
 
     @@map("sessions") //spravne prejmenovani
 }
