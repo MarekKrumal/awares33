@@ -13,8 +13,13 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: {
+<<<<<<< HEAD
     template: "%s | aware",
     default: "aware",
+=======
+    template: "%s | awares",
+    default: "awares",
+>>>>>>> 5759850196d30841fbb4da5a07e5ffc5ead25551
   },
   description: "The social media app for those who are aware",
 };
