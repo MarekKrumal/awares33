@@ -25,6 +25,7 @@ model User {
   avatarUrl     String?             // nepovine tady budeme ukladatat user avatar
   bio           String?
   sessions      Session[]
+  posts         Post[]
 
   createdAt     DateTime   @default(now()) // tohle je pridano aby jsme to nemuseli vytvaret pozdeji Prisma nam to vygeneruje automaticky
 
@@ -38,4 +39,14 @@ model Session {
      user       User        @relation(fields: [userId], references:[id], onDelete: Cascade) //userId odkazuje(referances): na id v model User nahore +++++ onDelete: Cascade kdyz smazeme Usera model Session bude take smazana
 
     @@map("sessions") //spravne prejmenovani
+}
+
+model Post {
+  id            String      @id @default(cuid()) // @default(cuid()) feature prismy automaticky generuje ID napr. u usera to musime delat sami
+  content       String
+  userId        String
+  user          User        @relation(fields: [userId], references:[id], onDelete: Cascade) // napoji userId na id a kdyz smazeme usera smazou se i jeho posts
+  createdAt     DateTime    @default(now()) //kdy byl post created
+
+  @@map("post")
 }

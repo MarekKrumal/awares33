@@ -19,3 +19,7 @@ export const loginSchema = z.object({
 });
 
 export type LoginValues = z.infer<typeof loginSchema>; //LoginValues stejan logika jako u SignUpValues
+
+export const createPostSchema = z.object({
+  content: requiredString, //schema pro posts
+});
