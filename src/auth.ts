@@ -46,13 +46,16 @@ export const validateRequest = cache(
   async (): Promise<
     { user: User; session: Session } | { user: null; session: null }
   > => {
-    const sesionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+    const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
 
-    if (!sesionId) {
-      return { user: null, session: null };
+    if (!sessionId) {
+      return {
+        user: null,
+        session: null,
+      };
     }
 
-    const result = await lucia.validateSession(sesionId);
+    const result = await lucia.validateSession(sessionId);
 
     try {
       if (result.session && result.session.fresh) {

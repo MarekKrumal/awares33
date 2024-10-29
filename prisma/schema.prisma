@@ -48,5 +48,5 @@ model Post {
   user          User        @relation(fields: [userId], references:[id], onDelete: Cascade) // napoji userId na id a kdyz smazeme usera smazou se i jeho posts
   createdAt     DateTime    @default(now()) //kdy byl post created
 
-  @@map("post")
+  @@map("posts")
 }
