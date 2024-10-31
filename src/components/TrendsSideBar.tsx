@@ -65,7 +65,7 @@ const getTrendingTopics = unstable_cache(
   //cach na serveru ne naclientu unstable cache experimentalni API
   async () => {
     const result = await prisma.$queryRaw<{ hashtag: string; count: bigint }[]>`
-    {/*RAW SQL*/  }
+    
             SELECT LOWER(unnest(regexp_matches(content, '#[[:alnum:]_]+', 'g'))) AS hashtag, COUNT(*) AS count
             FROM posts
             GROUP BY (hashtag)

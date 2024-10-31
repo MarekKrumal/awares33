@@ -16,3 +16,8 @@ export const postDataInclude = {
 export type PostData = Prisma.PostGetPayload<{
   include: typeof postDataInclude; //dostaneme post type PostData pro dostavani postu s "include" ktere mame definovano na radku 3
 }>;
+
+export interface PostsPage {
+  posts: PostData[];
+  nextCursor: string | null;
+}

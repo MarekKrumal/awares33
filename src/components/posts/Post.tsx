@@ -1,7 +1,7 @@
 import { PostData } from "@/lib/types";
 import Link from "next/link";
 import UserAvatar from "../UserAvatar";
-import { formatRelative } from "date-fns";
+
 import { formatRelativeDate } from "@/lib/utils";
 
 interface PostProps {
@@ -10,7 +10,7 @@ interface PostProps {
 
 export default function Post({ post }: PostProps) {
   return (
-    <article className="rpunded-2xl space-y-3 bg-card p-5 shadow-sm">
+    <article className="space-y-3 rounded-2xl bg-card p-5 shadow-sm">
       <div className="flex flex-wrap gap-3">
         <Link href={`/users/${post.user.username}`}>
           <UserAvatar avatarUrl={post.user.avatarUrl} />
@@ -24,7 +24,7 @@ export default function Post({ post }: PostProps) {
           </Link>
           <Link
             href={`/posts/${post.id}`}
-            className="Block text-sm text-muted-foreground hover:underline"
+            className="block text-sm text-muted-foreground hover:underline"
           >
             {formatRelativeDate(post.createdAt)}
           </Link>
