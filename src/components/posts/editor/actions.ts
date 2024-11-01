@@ -2,9 +2,8 @@
 
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
+import { getPostDataInclude } from "@/lib/types";
 import { createPostSchema } from "@/lib/validation";
-
-import { postDataInclude } from "@/lib/types";
 
 export async function submitPost(input: string) {
   const { user } = await validateRequest(); //zkontrolujeme jestli user je authetifikovan
@@ -19,7 +18,7 @@ export async function submitPost(input: string) {
       content,
       userId: user.id,
     },
-    include: postDataInclude,
+    include: getPostDataInclude(user.id),
   });
 
   return NewPost;

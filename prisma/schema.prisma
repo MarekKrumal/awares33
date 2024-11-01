@@ -26,8 +26,11 @@ model User {
   bio           String?
   sessions      Session[]
   posts         Post[]
+  following     Follow[]  @relation("Following")
+  followers     Follow[]  @relation("Followers")
 
   createdAt     DateTime   @default(now()) // tohle je pridano aby jsme to nemuseli vytvaret pozdeji Prisma nam to vygeneruje automaticky
+  
 
   @@map("users")    // "users je odkaz na model User" + slouzi jako spravne prejmenovani
 }
@@ -39,6 +42,16 @@ model Session {
      user       User        @relation(fields: [userId], references:[id], onDelete: Cascade) //userId odkazuje(referances): na id v model User nahore +++++ onDelete: Cascade kdyz smazeme Usera model Session bude take smazana
 
     @@map("sessions") //spravne prejmenovani
+}
+
+model Follow {
+  followerId    String
+  follower      User        @relation("Following", fields: [followerId], references:[id], onDelete: Cascade)
+  followingId   String
+  following     User        @relation("Followers", fields: [followingId], references:[id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@map("follows")
 }
 
 model Post {
