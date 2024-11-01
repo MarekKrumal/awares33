@@ -44,7 +44,12 @@ export default function FollowButton({
       return { previusState };
     },
     onError(error, variables, context) {
-      queryClient.setQueryData;
+      queryClient.setQueryData(queryKey, context?.previusState);
+      console.error(error);
+      toast({
+        variant: "destructive",
+        description: "Something went wrong. Please try again later.",
+      });
     },
   });
 
