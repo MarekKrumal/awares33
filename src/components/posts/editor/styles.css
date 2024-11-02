@@ -9,14 +9,3 @@
 .tiptap.ProseMirror {
   outline: none;
 }
-
-.tiptap.ProseMirror {
-  background-color: hsl(
-    var(--editor-background)
-  ); /* Nastaví specifické pozadí pro editor */
-  color: hsl(var(--foreground)); /* Nastaví barvu textu */
-  outline: none;
-  padding: 1rem;
-  border-radius: var(--radius);
-  min-height: 4rem;
-}
