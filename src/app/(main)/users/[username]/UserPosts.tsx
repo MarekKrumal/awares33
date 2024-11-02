@@ -8,7 +8,11 @@ import { PostsPage } from "@/lib/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
-export default function FollowingFeed() {
+interface UserPostsProps {
+  userId: string;
+}
+
+export default function UserPosts({ userId }: UserPostsProps) {
   const {
     data,
     fetchNextPage,
@@ -17,11 +21,11 @@ export default function FollowingFeed() {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["post-feed", "following"], //data cached
+    queryKey: ["post-feed", "user-posts", userId],
     queryFn: ({ pageParam }) =>
       kyInstance
         .get(
-          "/api/posts/following",
+          `/api/users/${userId}/posts`,
           pageParam ? { searchParams: { cursor: pageParam } } : {},
         )
         .json<PostsPage>(),
@@ -38,7 +42,7 @@ export default function FollowingFeed() {
   if (status === "success" && !posts.length && !hasNextPage) {
     return (
       <p className="text-center text-muted-foreground">
-        No posts found. Start following people to see their posts here.
+        This user hasn&apos;t posted anything yet.
       </p>
     );
   }

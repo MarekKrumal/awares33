@@ -1,4 +1,6 @@
 import { PostData } from "@/lib/types";
+import LoadingButton from "../LoadingButton";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,9 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
-import { useDeletePostMutation } from "./mutation";
-import LoadingButton from "../LoadingButton";
-import { Button } from "../ui/button";
+import { useDeletePostMutation } from "./mutations";
 
 interface DeletePostDialogProps {
   post: PostData;

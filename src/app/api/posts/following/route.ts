@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
     if (!user) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
+
     const posts = await prisma.post.findMany({
       where: {
         user: {
@@ -39,6 +40,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(data);
   } catch (error) {
+    console.error(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

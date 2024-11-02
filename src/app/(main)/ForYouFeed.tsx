@@ -1,7 +1,7 @@
 "use client";
 
 import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
-import Post from "@/components/posts/Post"; //https://tanstack.com/query/latest/docs/react/queries/fetching
+import Post from "@/components/posts/Post";
 import PostsLoadingSkeleton from "@/components/posts/PostsLoadingSkeleton";
 import kyInstance from "@/lib/ky";
 import { PostsPage } from "@/lib/types";
@@ -17,7 +17,7 @@ export default function ForYouFeed() {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["post-feed", "for-you"], //data cached
+    queryKey: ["post-feed", "for-you"],
     queryFn: ({ pageParam }) =>
       kyInstance
         .get(
@@ -27,13 +27,6 @@ export default function ForYouFeed() {
         .json<PostsPage>(),
     initialPageParam: null as string | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
-    /*async () => {
-      const res = await fetch("/api/posts/for-you");
-      if (!res.ok) {
-        throw new Error(`Request failed with status code ${res.status}`);
-      }
-      return res.json();E
-    },*/
   });
 
   const posts = data?.pages.flatMap((page) => page.posts) || [];

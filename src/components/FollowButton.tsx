@@ -1,11 +1,11 @@
 "use client";
 
 import useFollowerInfo from "@/hooks/useFollowerInfo";
+import kyInstance from "@/lib/ky";
 import { FollowerInfo } from "@/lib/types";
-import { useToast } from "./ui/use-toast";
 import { QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "./ui/button";
-import kyInstance from "@/lib/ky";
+import { useToast } from "./ui/use-toast";
 
 interface FollowButtonProps {
   userId: string;
@@ -32,19 +32,19 @@ export default function FollowButton({
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey });
 
-      const previusState = queryClient.getQueryData<FollowerInfo>(queryKey);
+      const previousState = queryClient.getQueryData<FollowerInfo>(queryKey);
 
-      queryClient.setQueryData<FollowerInfo>(queryKey, (old) => ({
+      queryClient.setQueryData<FollowerInfo>(queryKey, () => ({
         followers:
-          (previusState?.followers || 0) +
-          (previusState?.isFollowedByUser ? -1 : 1),
-        isFollowedByUser: !previusState?.isFollowedByUser,
+          (previousState?.followers || 0) +
+          (previousState?.isFollowedByUser ? -1 : 1),
+        isFollowedByUser: !previousState?.isFollowedByUser,
       }));
 
-      return { previusState };
+      return { previousState };
     },
     onError(error, variables, context) {
-      queryClient.setQueryData(queryKey, context?.previusState);
+      queryClient.setQueryData(queryKey, context?.previousState);
       console.error(error);
       toast({
         variant: "destructive",

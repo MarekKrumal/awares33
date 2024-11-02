@@ -1,13 +1,14 @@
 import { PostData } from "@/lib/types";
+import { MoreHorizontal, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-} from "@radix-ui/react-dropdown-menu";
-import { useState } from "react";
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import DeletePostDialog from "./DeletePostDialog";
-import { DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { MoreHorizontal, Trash, Trash2 } from "lucide-react";
 
 interface PostMoreButtonProps {
   post: PostData;
@@ -31,7 +32,8 @@ export default function PostMoreButton({
         <DropdownMenuContent>
           <DropdownMenuItem onClick={() => setShowDeleteDialog(true)}>
             <span className="flex items-center gap-3 text-destructive">
-              <Trash2 className="size-4">Delete</Trash2>
+              <Trash2 className="size-4" />
+              Delete
             </span>
           </DropdownMenuItem>
         </DropdownMenuContent>

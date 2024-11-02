@@ -1,6 +1,6 @@
-import ky from "ky"; //https://github.com/sindresorhus/ky
+import ky from "ky";
 
-const kdyInstance = ky.create({
+const kyInstance = ky.create({
   parseJson: (text) =>
     JSON.parse(text, (key, value) => {
       if (key.endsWith("At")) return new Date(value);
@@ -8,4 +8,4 @@ const kdyInstance = ky.create({
     }),
 });
 
-export default kdyInstance;
+export default kyInstance;

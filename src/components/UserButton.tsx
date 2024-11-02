@@ -1,6 +1,12 @@
 "use client";
 
+import { logout } from "@/app/(auth)/actions";
 import { useSession } from "@/app/(main)/SessionProvider";
+import { cn } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import { Check, LogOutIcon, Monitor, Moon, Sun, UserIcon } from "lucide-react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,25 +17,18 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import UserAvatar from "./UserAvatar";
-import Link from "next/link";
-import { Check, LogOutIcon, Monitor, Moon, Sun, UserIcon } from "lucide-react";
-import { logout } from "@/app/(auth)/actions";
-import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
-import { use } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface UserButtonProps {
-  className?: String;
+  className?: string;
 }
 
 export default function UserButton({ className }: UserButtonProps) {
   const { user } = useSession();
 
-  const { theme, setTheme } = useTheme(); //THEME
+  const { theme, setTheme } = useTheme();
 
   const queryClient = useQueryClient();
 

@@ -1,15 +1,13 @@
 "use client";
 
+import { useSession } from "@/app/(main)/SessionProvider";
+import LoadingButton from "@/components/LoadingButton";
+import UserAvatar from "@/components/UserAvatar";
+import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
-import { submitPost } from "./actions";
-import { useSession } from "@/app/(main)/SessionProvider";
-import UserAvatar from "@/components/UserAvatar";
-import { Button } from "@/components/ui/button";
-import "./styles.css";
 import { useSubmitPostMutation } from "./mutations";
-import LoadingButton from "@/components/LoadingButton";
+import "./styles.css";
 
 export default function PostEditor() {
   const { user } = useSession();
@@ -39,7 +37,6 @@ export default function PostEditor() {
         editor?.commands.clearContent();
       },
     });
-    editor?.commands.clearContent();
   }
 
   return (
