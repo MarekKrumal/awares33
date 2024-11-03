@@ -9,7 +9,7 @@ import { PropsWithChildren } from "react";
 import UserTooltip from "./UserTooltip";
 
 interface UserLinkWithTooltipProps extends PropsWithChildren {
-  username: string;
+  username: string; //nemame zadna jina data nemame zatim zadna user data
 }
 
 export default function UserLinkWithTooltip({
@@ -17,18 +17,20 @@ export default function UserLinkWithTooltip({
   username,
 }: UserLinkWithTooltipProps) {
   const { data } = useQuery({
-    queryKey: ["user-data", username],
+    queryKey: ["user-data", username], //nastavime userkey je dulezite ze username je soucasti klice
     queryFn: () =>
       kyInstance.get(`/api/users/username/${username}`).json<UserData>(),
+
     retry(failureCount, error) {
       if (error instanceof HTTPError && error.response.status === 404) {
-        return false;
+        return false; //nechceme retry
       }
-      return failureCount < 3;
+      return failureCount < 3; //pri jine errory (vsechny krome 404) retry zkusime 3x
     },
-    staleTime: Infinity,
+    staleTime: Infinity, //neni potreba refetch user informace porad dokola staci jednou
   });
 
+  //kdyz nemame userdata chceme vratit poouze Link
   if (!data) {
     return (
       <Link
@@ -39,7 +41,7 @@ export default function UserLinkWithTooltip({
       </Link>
     );
   }
-
+  //ale kdyz data existuji vratime Link v UserTooltip
   return (
     <UserTooltip user={data}>
       <Link
@@ -51,3 +53,5 @@ export default function UserLinkWithTooltip({
     </UserTooltip>
   );
 }
+
+//tuto komponentu pouzijime v Linkify.tsx tam Linkifijujeme nase username

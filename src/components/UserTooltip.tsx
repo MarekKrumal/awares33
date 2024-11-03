@@ -15,18 +15,21 @@ import {
 } from "./ui/tooltip";
 import UserAvatar from "./UserAvatar";
 
+//Tooltip je funkce pri ktere hoverujeme pres avatar,username ci @jmeno napr v komentari, tak se nam zobrazi profil daneho usera
+
 interface UserTooltipProps extends PropsWithChildren {
   user: UserData;
 }
 
 export default function UserTooltip({ children, user }: UserTooltipProps) {
-  const { user: loggedInUser } = useSession();
+  const { user: loggedInUser } = useSession(); // potrebuju loggedIn usera abych vedel jestli followuje usera ktereho spectuju(follow button)
 
+  //potrebujeme pocatecni stav pro nas follower button - vsechno info je v UserData nahore v interface
   const followerState: FollowerInfo = {
     followers: user._count.followers,
     isFollowedByUser: !!user.followers.some(
       ({ followerId }) => followerId === loggedInUser.id,
-    ),
+    ), //takhle vime ze followuje/nefollovujeme usera
   };
 
   return (
@@ -40,7 +43,10 @@ export default function UserTooltip({ children, user }: UserTooltipProps) {
                 <UserAvatar size={70} avatarUrl={user.avatarUrl} />
               </Link>
               {loggedInUser.id !== user.id && (
-                <FollowButton userId={user.id} initialState={followerState} />
+                <FollowButton
+                  userId={user.id}
+                  initialState={followerState} //kdyz udelam hover pres "sebe" nebude tam follow btn
+                />
               )}
             </div>
             <div>
@@ -51,7 +57,9 @@ export default function UserTooltip({ children, user }: UserTooltipProps) {
                 <div className="text-muted-foreground">@{user.username}</div>
               </Link>
             </div>
+
             {user.bio && (
+              //jestli ma user Bio at se zobrazi
               <Linkify>
                 <div className="line-clamp-4 whitespace-pre-line">
                   {user.bio}
