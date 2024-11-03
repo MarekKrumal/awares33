@@ -44,6 +44,31 @@ export const fileRouter = {
 
       return { avatarUrl: newAvatarUrl }; //toto budu returnoto na forntend pouzijeme to na okamzity update cache
     }),
+  attachment: f({
+    image: { maxFileSize: "4MB", maxFileCount: 5 },
+    video: { maxFileSize: "64MB", maxFileCount: 5 },
+  })
+    .middleware(async () => {
+      const { user } = await validateRequest(); //auth check
+
+      if (!user) throw new UploadThingError("Unauthorized");
+
+      return {}; //nepotrebujeme user.id staci empty object
+    })
+    .onUploadComplete(async ({ file }) => {
+      //onupload chceme vytvorit Media entry bez postId ,postId je pridano az odesleme post
+      const media = await prisma.media.create({
+        data: {
+          url: file.url.replace(
+            "/f/", //defaut URL
+            `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`, //correctURL
+          ),
+          type: file.type.startsWith("image") ? "IMAGE" : "VIDEO",
+        }, // uploadnute files ale post nebyl odeslan, az odesleme priradime postId to media (prisma)
+      });
+
+      return { mediaId: media.id }; //return na frontend
+    }),
 } satisfies FileRouter;
 
 export type AppFileRouter = typeof fileRouter;

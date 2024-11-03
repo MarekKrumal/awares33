@@ -23,6 +23,7 @@ export type LoginValues = z.infer<typeof loginSchema>; //LoginValues stejan logi
 
 export const createPostSchema = z.object({
   content: requiredString, //schema pro posts
+  mediaIds: z.array(z.string()).max(5, "Cannot have more than 5 attachments"), //max 5 media files
 });
 
 //kdyz updejtneme nas user profile chceme updejtovat i jmeno + bio , proot vytvorime validationschema

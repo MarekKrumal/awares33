@@ -18,7 +18,8 @@ import EditProfileButton from "./EdiProfileButton";
 interface PageProps {
   params: { username: string };
 }
-
+//misto fetchovani v function Page udelame jinou funcki kterou obalime v cache
+//musime fetchotnou usera v generateMetadata a v Page, abychom nedelali dva ruzne database Reqs pro same data obalime to v cache, takjhle se to dela v next.js,nemuzeme sharovat data mezi 2 funkcemi
 const getUser = cache(async (username: string, loggedInUserId: string) => {
   const user = await prisma.user.findFirst({
     where: {
