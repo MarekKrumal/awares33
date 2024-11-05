@@ -28,6 +28,7 @@ model User {
   posts         Post[]
   following     Follow[]  @relation("Following")
   followers     Follow[]  @relation("Followers")
+  likes         Like[]
 
   createdAt     DateTime   @default(now()) // tohle je pridano aby jsme to nemuseli vytvaret pozdeji Prisma nam to vygeneruje automaticky
   
@@ -60,6 +61,9 @@ model Post {
   userId        String
   user          User        @relation(fields: [userId], references:[id], onDelete: Cascade) // napoji userId na id a kdyz smazeme usera smazou se i jeho posts
   attachments   Media[]                                                                        //media
+  likes         Like[]
+  
+  
   createdAt     DateTime    @default(now()) //kdy byl post created
   
 
@@ -80,4 +84,14 @@ model Media {
 enum MediaType {
   IMAGE
   VIDEO
+}
+
+model Like {
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade) 
+  postId        String
+  post          Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId]) //kazdy user muze dat jen jeden likes
+  @@map("likes") //rename table
 }
