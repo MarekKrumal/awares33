@@ -13,7 +13,7 @@ export async function submitPost(input: {
 
   if (!user) throw new Error("Unauthorized"); // user Error nepotrebuje videt, proto to neni error:"Unauthorized"
 
-  const { content, mediaIds } = createPostSchema.parse(input); //tedka input neni empty protoze, v validations ma createSchema-requiredString
+  const { content, mediaIds } = createPostSchema.parse(input);
   //new entry do dabaze
   const newPost = await prisma.post.create({
     data: {

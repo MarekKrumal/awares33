@@ -29,8 +29,10 @@ model User {
   following     Follow[]  @relation("Following")
   followers     Follow[]  @relation("Followers")
   likes         Like[]
+  bookmarks     Bookmark[]
+  comments      Comment[]
 
-  createdAt     DateTime   @default(now()) // tohle je pridano aby jsme to nemuseli vytvaret pozdeji Prisma nam to vygeneruje automaticky
+  createdAt     DateTime   @default(now()) // createdAt je pridano aby jsme to nemuseli vytvaret pozdeji Prisma nam to vygeneruje automaticky
   
 
   @@map("users")    // "users je odkaz na model User" + slouzi jako spravne prejmenovani
@@ -62,6 +64,9 @@ model Post {
   user          User        @relation(fields: [userId], references:[id], onDelete: Cascade) // napoji userId na id a kdyz smazeme usera smazou se i jeho posts
   attachments   Media[]                                                                        //media
   likes         Like[]
+  bookmarks     Bookmark[]
+  comments      Comment[]
+  
   
   
   createdAt     DateTime    @default(now()) //kdy byl post created
@@ -86,6 +91,18 @@ enum MediaType {
   VIDEO
 }
 
+model Comment {
+  id            String      @id @default(cuid())
+  content       String
+  userId        String
+  user          User        @relation(fields: [userId], references:[id], onDelete: Cascade)
+  postId        String 
+  post          Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt     DateTime   @default(now())
+
+  @@map("comments")
+}
+
 model Like {
   userId        String
   user          User        @relation(fields: [userId], references: [id], onDelete: Cascade) 
@@ -94,4 +111,17 @@ model Like {
 
   @@unique([userId, postId]) //kazdy user muze dat jen jeden likes
   @@map("likes") //rename table
+}
+
+model Bookmark {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade) 
+  postId        String
+  post          Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime   @default(now()) 
+
+  @@unique([userId, postId])
+  @@map("bookmarks") //rename table
 }
