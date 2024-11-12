@@ -2,6 +2,7 @@
 
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
+import streamServerClient from "@/lib/stream";
 import { getUserDataSelect } from "@/lib/types";
 import {
   updateUserProfileSchema,
@@ -13,13 +14,21 @@ export async function updateUserProfile(values: UpdateUserProfileValues) {
 
   const { user } = await validateRequest(); //autorizace usera pomoci validateRequest
 
-  if (!user) throw new Error("Unauthorized"); //kdyz user neni autorizovan-Error
+  if (!user) throw new Error("Unauthorized");
 
-  //updateuser bude vracen na frontEnd at muzeme pozdeji updejtovat ReactQueryFeed pomoci mutating cache
-  const updatedUser = await prisma.user.update({
-    where: { id: user.id },
-    data: validatedValues,
-    select: getUserDataSelect(user.id),
+  const updatedUser = await prisma.$transaction(async (tx) => {
+    const updatedUser = await tx.user.update({
+      where: { id: user.id },
+      data: validatedValues,
+      select: getUserDataSelect(user.id),
+    });
+    await streamServerClient.partialUpdateUser({
+      id: user.id,
+      set: {
+        name: validatedValues.displayName,
+      },
+    });
+    return updatedUser;
   });
 
   return updatedUser;
