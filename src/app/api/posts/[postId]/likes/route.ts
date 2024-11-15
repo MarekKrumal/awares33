@@ -138,7 +138,7 @@ export async function DELETE(
           issuerId: loggedInUser.id,
           recipientId: post.userId,
           postId,
-          type: "LILKE",
+          type: "LIKE",
         },
       }),
     ]);
