@@ -74,9 +74,14 @@ export default function PostEditor() {
   //copy paste funkce
   function onPaste(e: ClipboardEvent<HTMLInputElement>) {
     const files = Array.from(e.clipboardData.items)
-      .filter((item) => item.kind === "file")
+      .filter((item) => item.kind === "file") // Filtruje pouze soubory
       .map((item) => item.getAsFile()) as File[];
-    startUpload(files);
+
+    if (files.length > 0) {
+      // Pouze pokud jsou vloženy soubory, spustí se startUpload
+      startUpload(files);
+      e.preventDefault(); // Zabrání vložení souboru jako text
+    }
   }
 
   return (

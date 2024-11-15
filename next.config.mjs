@@ -1,3 +1,5 @@
+import { describe } from "node:test";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -16,6 +18,14 @@ const nextConfig = {
       //by jsme potrebovali payedplan, proto se potrebujeme ujistit ze ne kazdy muze pouzit nas backend a URLs aby mohli resiznout nase iamges a aby jsme se tomu vyhnuli
       // ze poskytneme pathname specificke pro nasi app aby jsme mohli resiznout images pouze v nasi app
     ],
+  },
+  rewrites: () => {
+    return [
+      {
+        source: "/hashtag/:tag",
+        destination: "/search?q=%23:tag", //zanecha puvodni URL ale redirecne nas na jinou page
+      },
+    ];
   },
 };
 
