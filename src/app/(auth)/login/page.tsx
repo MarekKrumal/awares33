@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import LoginForm from "./LoginForm";
+import LoginFormDemo from "./LoginFormDemo";
 import Link from "next/link";
 import loginImage from "@/assets/login.jpg";
 import Image from "next/image";
@@ -23,6 +24,7 @@ export default function Login() {
               <div className="h-px flex-1 bg-muted" />
             </div>
             <LoginForm />
+            <LoginFormDemo />
             <Link href="/signup" className="block text-center hover:underline">
               Don&apos;t have an account? Sign up
             </Link>

@@ -46,7 +46,7 @@ export default function PostEditor() {
         italic: false,
       }),
       Placeholder.configure({
-        placeholder: "What's drifting through the ether of your mind?",
+        placeholder: "Post here!",
       }),
     ],
   });
