@@ -70,6 +70,10 @@ model Post {
   bookmarks     Bookmark[]
   comments      Comment[]
   linkedNotifications Notification[]
+  originalPostId String?
+  originalPost   Post? @relation("RepostRelation", fields: [originalPostId], references: [id], onDelete: Cascade)
+  // Tohle pole slouží k tomu, abyste snadno získali seznam repostů, které odkazují na tento originál
+  reposts        Post[] @relation("RepostRelation")
   
   
   

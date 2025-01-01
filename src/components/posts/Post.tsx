@@ -14,8 +14,9 @@ import Image from "next/image";
 import LikeButton from "./LikeButton";
 import BookmarkButton from "./BookmarkButton";
 import { useState } from "react";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Repeat2Icon } from "lucide-react";
 import Comments from "../comments/Comments";
+import { useRepostMutation } from "./repostMutations";
 
 interface PostProps {
   post: PostData;
@@ -60,11 +61,30 @@ export default function Post({ post }: PostProps) {
           />
         )}
       </div>
+      {/* Zobrazení Reposted from @username */}
+      {post.originalPost && (
+        <div className="text-sm text-muted-foreground">
+          Reposted from{" "}
+          <Link
+            href={`/users/${post.originalPost.user.username}`}
+            className="hover:underline"
+          >
+            @{post.originalPost.user.username}
+          </Link>
+        </div>
+      )}
       <Linkify>
         <div className="whitespace-pre-line break-words">{post.content}</div>
       </Linkify>
-      {!!post.attachments.length && (
-        <MediaPreviews attachments={post.attachments} />
+      {/* Zobrazení příloh (media) */}
+      {!!(post.attachments.length || post.originalPost?.attachments.length) && (
+        <MediaPreviews
+          attachments={
+            post.attachments.length
+              ? post.attachments
+              : post.originalPost?.attachments || []
+          }
+        />
       )}
       <hr className="text-muted-foreground" />
       <div className="flex justify-between gap-5">
@@ -80,7 +100,9 @@ export default function Post({ post }: PostProps) {
             post={post}
             onClick={() => setShowComments(!showComments)}
           />
+          <RepostButton postId={post.id} />
         </div>
+
         <BookmarkButton
           postId={post.id}
           initialState={{
@@ -159,6 +181,19 @@ function CommentButton({ post, onClick }: CommentButtonProps) {
         {post._count.comments}{" "}
         <span className="hidden sm:inline">Comments</span>
       </span>
+    </button>
+  );
+}
+
+function RepostButton({ postId }: { postId: string }) {
+  const mutation = useRepostMutation();
+  return (
+    <button
+      onClick={() => mutation.mutate(postId)}
+      className="flex items-center gap-2"
+    >
+      <Repeat2Icon />
+      <span className="text-sm font-medium">Repost</span>
     </button>
   );
 }

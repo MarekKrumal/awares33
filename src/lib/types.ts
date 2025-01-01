@@ -29,12 +29,28 @@ export type UserData = Prisma.UserGetPayload<{
   select: ReturnType<typeof getUserDataSelect>;
 }>;
 
+/**
+ * Přidání pole `originalPost`, abychom mohli zobrazit údaje
+ * o původním příspěvku (repost). Zde získáváme pouze
+ * uživatelské jméno a displayName.
+ */
 export function getPostDataInclude(loggedInUserId: string) {
   return {
     user: {
       select: getUserDataSelect(loggedInUserId),
     },
-    attachments: true, // s kazdym postem fetchneme i attachaments
+    originalPost: {
+      select: {
+        user: {
+          select: {
+            username: true,
+            displayName: true,
+          },
+        },
+        attachments: true, // Přidá přílohy původního příspěvku
+      },
+    },
+    attachments: true, // Přílohy aktuálního příspěvku
     likes: {
       where: {
         userId: loggedInUserId,
